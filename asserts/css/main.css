@@ -164,14 +164,6 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
-  min-height: 100vh;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   padding: 5px;
@@ -201,6 +193,14 @@ iframe {
   font-size: 39px;
   color: #333333;
   line-height: 1.2;
+  text-align: center;
+}
+
+.mainwindow-title {
+  display: block;
+  font-family: Poppins-Regular;
+  font-size: 20px;
+  color: #333333;
   text-align: center;
 }
 

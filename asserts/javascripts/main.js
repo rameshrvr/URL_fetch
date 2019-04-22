@@ -2,7 +2,7 @@
 (function ($) {
     "use strict";
 
-
+    var customerUserName;
      /*==================================================================
     [ Focus input ]*/
     $('.input100').each(function(){
@@ -33,6 +33,43 @@
 
         return check;
     });
+
+    // Custom JS functions
+
+    $('#login-button').click(function(){
+        customerUserName = $('#username').val();
+        var validationData;
+        
+        // Ajax function definition
+        function ajax() {
+           return $.ajax({
+                url: 'http://127.0.0.1:5000/validate_user/' + customerUserName,
+                type: 'GET',
+                success: function(data){ validationData = data}
+            })
+        }
+
+        // Ajax function call
+        ajax().done(function(){
+            if (validationData['user_validation'] == 'Success') {
+                // Move to main page
+                window.location.href = 'mainwindow.html';
+                // Override the pop-up display page
+                chrome.browserAction.setPopup({ popup: "mainwindow.html" });
+            } else {
+                alert('UserName/Password validation failed. Please Try Again!');
+            }
+        }).fail(function(){ alert('Please enter Username and Password')})
+    });
+
+
+    $('#logout-button').click(function(){
+        // Move to LogIn page
+        window.location.href = 'welcome.html';
+        chrome.browserAction.setPopup({ popup: "welcome.html" });
+    });
+
+    //
 
 
     $('.validate-form .input100').each(function(){
