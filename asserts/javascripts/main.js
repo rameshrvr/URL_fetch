@@ -80,7 +80,9 @@
 
     function validate (input) {
         if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+            if($(input).val().trim().match(
+                /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
+            ) == null) {
                 return false;
             }
         }
@@ -102,6 +104,22 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
+
+    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+        var tabUrl = tabs[0].url;
+        // Ajax for sending browser url to server
+        function ajax() {
+            return $.ajax({
+                url: 'http://127.0.0.1:5000/get_url/' + tabUrl,
+                type: 'GET',
+                success: function(data){ ajaxResults = data}
+            })
+        }
+        console.log(tabUrl);
+        ajax().done(function(){
+            console.log(ajaxResults);
+        });
+    });
     
     
 

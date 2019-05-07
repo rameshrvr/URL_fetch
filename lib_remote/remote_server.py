@@ -14,7 +14,15 @@ class IsUserExists(Resource):
         return {"user_validation": "Failure"}
 
 
+class GetUrlFromUser(Resource):
+    def get(self, url):
+        if url:
+            return {"url_get": "Success"}
+        return {"url_get": "Failure"}
+
+
 api.add_resource(IsUserExists, '/validate_user/<username>')
+api.add_resource(GetUrlFromUser, '/get_url/<url>')
 
 if __name__ == '__main__':
     app.run(debug=True)
