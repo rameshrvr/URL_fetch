@@ -1,28 +1,30 @@
-from flask import Flask
-from flask_restful import Resource, Api
+from flask import Flask, jsonify
+from flask_restful import Api
+from flask import request
+from database.db_handlers import BaseHandlers
 
 app = Flask(__name__)
 api = Api(app)
 
-VALID_USERS = ['rvramesh', 'rameshrv']
+
+@app.route('/send_url', methods=['GET'])
+def send_url():
+    if request.args.get('url'):
+        return jsonify({'url': 'Success'})
+    return jsonify({'url': 'Failure'})
 
 
-class IsUserExists(Resource):
-    def get(self, username):
-        if username in VALID_USERS:
-            return {"user_validation": "Success"}
-        return {"user_validation": "Failure"}
+@app.route('/validate_user', methods=['GET'])
+def validate_user():
+    user_details = BaseHandlers('/Users/Shared/URL_Fetch.db').get_user(
+        username=request.args.get('username')
+    )
+    if user_details:
+        return jsonify({"user_validation": "Success"})
+    return jsonify({"user_validation": "Failure"})
 
 
-class GetUrlFromUser(Resource):
-    def get(self, url):
-        if url:
-            return {"url_get": "Success"}
-        return {"url_get": "Failure"}
-
-
-api.add_resource(IsUserExists, '/validate_user/<username>')
-api.add_resource(GetUrlFromUser, '/get_url/<url>')
+# api.add_resource(IsUserExists, '/validate_user/<username>')
 
 if __name__ == '__main__':
     app.run(debug=True)

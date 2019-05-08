@@ -43,7 +43,10 @@
         // Ajax function definition
         function ajax() {
            return $.ajax({
-                url: 'http://127.0.0.1:5000/validate_user/' + customerUserName,
+                url: 'http://127.0.0.1:5000/validate_user',
+                data: {
+                    'username': customerUserName
+                },
                 type: 'GET',
                 success: function(data){ validationData = data}
             })
@@ -107,15 +110,25 @@
 
     chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
         var tabUrl = tabs[0].url;
+        var ajaxResults;
+
+        if (tabUrl.includes('www.google')){
+            var regex = /.*&q=(.*)&oq=/g;
+            tabUrl = regex.exec(tabUrl)[1].replace(/\+/g, ' ')
+        }
         // Ajax for sending browser url to server
         function ajax() {
             return $.ajax({
-                url: 'http://127.0.0.1:5000/get_url/' + tabUrl,
+                url: 'http://127.0.0.1:5000/send_url',
+                data: {
+                    'url': tabUrl.toString(),
+                    'username': customerUserName
+                },
                 type: 'GET',
+                dataType: 'json',
                 success: function(data){ ajaxResults = data}
             })
         }
-        console.log(tabUrl);
         ajax().done(function(){
             console.log(ajaxResults);
         });
